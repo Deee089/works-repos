@@ -1,0 +1,18 @@
+#!/bin/bash
+Shell script to create a directory in the default home of the use currently login into the server.
+
+echo "This script create a directory in the current user default home"
+
+read -p "Please enter the new directory name: " dirname
+
+sudo mkdir /home/$dirname
+
+read -p "Please enter the file name: " filename
+
+cat >> $filename << EOL
+
+We are Etech Engineers
+
+EOL
+
+sudo mv $filename /home/$dirname

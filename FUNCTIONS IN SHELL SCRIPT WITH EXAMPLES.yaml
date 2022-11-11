@@ -1,0 +1,166 @@
+FUNCTIONS IN SHELL SCRIPT WITH EXAMPLES Admin  November 14, 2019  UNIX TUTORIAL
+functions-in-shell-script
+Below post explained in following sections.
+
+How to declare a function in shell script
+How to call a function in shell script
+Function with parameters
+Scope of Variables
+Return values from functions
+As like in almost all other programming languages, you can use functions in shell script to combine pieces of code in a more logical way or you can utilize functions for recursion.
+
+If we talk about Functions, we know basic things like declaring function, defining function and calling function.
+
+HOW TO DECLARE A FUNCTION IN SHELL SCRIPT
+Declaring a function is just a matter of writing just function name with the curly braces like below.
+
+Function code is not executed until the function is called. Functions are read in, but basically ignored until they are actually called.
+
+?
+1
+2
+3
+4
+my_function()
+{
+code_goes_here
+}
+Or
+
+?
+1
+2
+3
+4
+function my_function
+{
+code_goes_here
+}
+Below is the sample function declaration.
+
+# A simple script with a function
+bye_msg()
+{
+echo “you just learnt function declaration in shell script. Time to leave!”
+}
+HOW TO CALL A FUNCTION IN SHELL SCRIPT
+Calling a function in shell script is just like calling another program, you just write its name if you don’t have to pass any arguments.
+
+If you have to pass arguments to function, you just pass them as like in shell script.
+
+#!/bin/bash
+# A simple script with to call function
+echo “This is starting line of the shell script”
+bye_msg()
+{
+echo “you just learnt function declaration in shell script. Time to leave!”
+}
+bye_msg
+echo “Closing the script”
+Notice that a functions don’t need to be declared in any specific order.
+
+FUNCTION WITH PARAMETERS
+#!/bin/bash
+# A simple script with parameters to the function
+quit() {
+exit
+}
+param() {
+echo $1
+}
+param hi
+param hello
+quit
+echo “how are you?”
+When running the script you’ll notice that first: the function ‘param’ is called, second the ‘param’ function again, and ‘quit’ function. Here execution never reaches to last echo statement.
+
+SCOPE OF VARIABLES
+This is something different when you compare with other programming languages scope rules. Actually, there is no scoping, other than the parameters ($1, $2, $@, etc).
+
+I will explain the scope using below short code.
+
+#!/bin/sh
+my_func()
+{
+echo “I was called as : $@”
+x=20
+}
+#Main script starts here
+echo “Script was called with $@”
+x=10
+echo “x is $x”
+my_func 10 20 30
+echo “x is $x”
+The script, when called as “sample_scope.sh a b c”, gives the following output:
+
+[wot@unix ~] $ sh sample_scope.sh a b c
+Script was called with a b c
+x is 10
+I was called as : 10 20 30
+x is 20
+[wot@unix ~] $
+The $@ parameters are changed within the function to reflect how the function was called. The variable x, however, is effectively a global variable my_func changed it, and that change is still effective when control returns to the main script.
+
+RETURN VALUES FROM FUNCTIONS
+If you try execute an exit command from inside a function, its effects not only to terminate execution of the function but also of the shell program that called the function.
+
+If you instead want to just terminate execution of the function, then there is way to come out of a defined function using ‘return’.
+
+Based on the requirement you can return any value from your function using the return command.
+
+?
+1
+return code
+Here code can be anything you choose here, but obviously you should choose something that is meaningful or useful in the context of your script as a whole.
+
+Below example function will return the sum of 2 input parameters.
+
+#!/bin/sh
+# Define your function here
+sum ()
+{
+echo “Given numbers are $1 $2”
+a=`expr $1 + $2`
+return $a
+}
+
+# Invoke your function
+sum 3 5
+# Capture value returned by last command
+sumvalue=$?
+echo “Sum value is $sumvalue”
+
+If you run this script, you get the output as follows.
+
+[wot@unix ~] $ sh function_return.sh
+Given numbers are 3 5
+Sum value is 8
+[wot@unix ~]
+You can return anything from function such as strings and below example function will return strings.
+
+#!/bin/bash
+# Variables
+site=”WINGS OF TECHNOLOGY”
+out=””
+##################################################################
+# Purpose: Converts a string to lowercase
+# Arguments:
+# $@ -> String to convert to lowercase
+##################################################################
+function to_lower()
+{
+local str=”$@”
+local output
+output=$(tr ‘[A-Z]’ ‘[a-z]'<<<“${str}”)
+echo $output
+}# invoke the to_lower()
+to_lower “This Is a TEST”# invoke to_lower() and store its result to $out variable
+out=$(to_lower ${site})# Display back the result from $out
+echo “Site name : $out”
+If you run the above script, you get the output as follows.
+
+[wot@unix ~] $ sh function_output.sh
+this is a test
+Site name : wings of technology
+[wot@unix ~] $
+SHARING IS CARING 🙂

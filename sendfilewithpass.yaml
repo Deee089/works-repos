@@ -1,0 +1,19 @@
+#!/bin/bash
+#This script move file created $yourname into /home/ubuntu
+password="Team4"
+user="etech"
+sudo touch etech.txt
+sudo chmod +x etech.txt
+sudo cat /var/log/kern.log > etech.txt
+sudo cat etech.txt #FILE is "NOT EMPTY"
+ips=( 172.31.13.146 172.31.10.79 172.31.13.147 )
+
+for i in ${ips[@]}; do
+sshpass -p "$password" scp etech.txt $user@$i:/home/ubuntu
+done 
+
+#delete and zero out the content of a file
+sudo cat /dev/null > etech.txt
+
+#Remove the directory from the source server
+sudo rm -d etech.txt
